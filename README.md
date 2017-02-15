@@ -35,10 +35,6 @@ sudo exportfs -a
 sudo service nfs-kernel-server start
 ```
 
-
-
-
-
 ## T-mux Tip
 
 To save a scroll-back buffer in tmux, do the following:
