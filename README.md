@@ -81,3 +81,41 @@ Sometimes I have different success with the Ubuntu pre-packaged adb versus the A
 ./adb start-server
 ./adb devices
 ```
+
+## Previewing Github Style Markdown
+
+Not all markdown is created equal, so in an effort to reduce the number of commits I have to make
+to github repos that have issues with the markdown, I should preview the markdown locally before
+I commit it.
+
+There is a python tool that can be used to render the markdown:
+
+```
+pip install grip
+
+# Or what I had to do
+pip install grip --user
+```
+
+There documentation says you can just type grip in a directory and it pick a port number and setup
+a web server and start serving the HTML version of the markdown for you.
+
+```
+grip
+```
+
+I wasn't able to do that, but they show you how to write a quick python application that will serve
+the markdown for you, and this is what I ended up doing.  Create a python script preview.py, and add
+the following contents to it:
+
+```
+#!/usr/bin/env python
+
+from grip import serve
+
+serve(port=8080)
+```
+
+Make it executeable, and then execute the script.  Then you just open browser, and head to 127.0.0.1:8080
+
+
