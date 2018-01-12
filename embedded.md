@@ -22,14 +22,39 @@ Had to specify generic cross compile prefix for other GNU binutils like objdump.
 the GCC 4.9 package did not come with ar-4.9, and I was able to use a different version for that tool as
 well.
 
+This has 2 outputs.  Both will confusingly work OK with QEMU.  The file u-boot is an ELF.  I have no
+idea how it is opened by QEMU, but it seems to be fine with running this file:
+
+  qemu-system-arm -M versatilepb -m 128M -nographic -kernel u-boot
+
+The second file is u-boot.bin, and this is what the processor would jump into directly at startup.
+It gets loaded at address 0x00010000
+
+  qemu-system-arm -M verstailepb -m 128M -nographic -kernel u-boot.bin
+  md 0x00010000
+
+
 === Building the Linux Kernel
 
-make arch=arm CROSS_COMPILE=arm-linux-gnueabi- versatile_defconfig
+# Also some sites recommend building by setting these environment variables by themselves
+export ARCH=arm
+export CROSS_COMPILE=arm-linux-gnueabi-
+
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- versatile_defconfig
 make uImage LOADADDR=0x00210000
 
 Also trying to create my own uImage that uses the uncompressed kernel
 
-mkimage -A arm -O linux -T kernel -C none -a 00500000 -e 00500000 -n Linux -d Image uImageCustom
+mkimage -A arm -O linux -T kernel -C none -a 04008000 -e 04008000 -n Linux -d Image uImageCustom
+
+== Running with QEMU 
+
+=== Stiching flash together
+
+Make a script that will drop u-boot.bin at address 0x00000000 of a file, then drop Linux kernel at
+some point after that.
+
+qemu-system-arm -machine versatilepb -m 128 -mtdblock flashImageFile.bin -sdl 
 
 == Debugging
 
@@ -46,3 +71,12 @@ In another shell, connect to it from gdb
  set architecture arm
  target remote 127.0.0.1:1234
 
+=== Kernel paging issues ===
+
+My kernel I compiled what not XIP (execute in place), and there is some code in there that wants
+a particular offset for the kernel in RAM.  I think it needs to be at an offset of
+
+ 16MB * n + 0x8000
+
+Where I think n can be any number.  But I had an issue where I used 0x01008000 and ran into an
+issue where u-boot was clobbering itself.
