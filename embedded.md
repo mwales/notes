@@ -54,7 +54,9 @@ mkimage -A arm -O linux -T kernel -C none -a 04008000 -e 04008000 -n Linux -d Im
 Make a script that will drop u-boot.bin at address 0x00000000 of a file, then drop Linux kernel at
 some point after that.
 
-qemu-system-arm -machine versatilepb -m 128 -mtdblock flashImageFile.bin -sdl 
+qemu-system-arm -machine versatilepb -m 128M -kernel flashImageFile.bin -nographic
+
+bootm 0x00210000
 
 == Debugging
 
@@ -80,3 +82,7 @@ a particular offset for the kernel in RAM.  I think it needs to be at an offset 
 
 Where I think n can be any number.  But I had an issue where I used 0x01008000 and ran into an
 issue where u-boot was clobbering itself.
+
+
+
+
