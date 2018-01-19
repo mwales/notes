@@ -47,7 +47,40 @@ Also trying to create my own uImage that uses the uncompressed kernel
 
 mkimage -A arm -O linux -T kernel -C none -a 04008000 -e 04008000 -n Linux -d Image uImageCustom
 
+== Building BusyBox / Root Filesystem ==
+
+The best instructions I found so far were on https://github.com/surajx/qemu-arm-linux
+
+export ARCH=arm
+export CROSS_COMPILE=arm-linux-gnueabi-
+make defconfig
+make menuconfig
+ * Do stuff like make a staticly linked binary
+make -j8 install
+cd _install
+
+# Create an init script
+mkdir proc sys dev etc etc/init.d
+echo "#!/bin/bash" > etc/init.d/rcS
+echo "mount -t proc none /proc" >> etc/init.d/rcS
+echo "mount -t sysfs none /sys" >> etc/init.d/rcS
+chmod +x etc/init.d/rcS
+
+# Now create the initrd / root file system
+find . | cpio -o --format=newc > ../rootfs.img
+cd ..
+gzip -c rootfs.img > rootfs.img.gz
+
+# For his Linux kernel, he compile Linux v3.10 with vexpress_defconfig configuration
+
+# For QEMU
+qemu-system-arm -M vexpress-a9 -m 256M -kernel linux-3.10/arch/arm/boot/zImage -initrd busybox-1.21.1/rootfs.img -append "root=/dev/ram rdinit=/sbin/init"
+
+Note: Notice that one kernel parameter is rdinit, not initrd, yeah, I wasted a lot of time because of that dumb crap
+
 == Running with QEMU 
+
+Note: Having trouble getting some of these steps to work correctly
 
 === Stiching flash together
 
