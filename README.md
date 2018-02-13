@@ -118,4 +118,10 @@ serve(port=8080)
 
 Make it executeable, and then execute the script.  Then you just open browser, and head to 127.0.0.1:8080
 
+# XFCE
+
+If the panel taskbar becomes unresponsive, open a shell and type the following to fix:
+
+  xfce4-panel -r 
+
 
