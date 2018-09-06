@@ -35,6 +35,30 @@ sudo exportfs -a
 sudo service nfs-kernel-server start
 ```
 
+## Working with disk images
+
+kpartx will automatically scan a dd image of a drive for partitions, and mount the partitions to loop devices
+
+Use kpartx -d to delete the loop devices (in /dev/mapper) when done
+
+## Search and replace CLI / Multiple Files
+
+Use sed to manipulate file contents from the command line
+
+```
+sed -i -e "s/search for me/replace with me/g" filename.txt
+```
+
+Combine with find to process many files at once
+
+```
+find . -exec sed -i -e "s/searchString/replaceString/g" {} \;
+```
+
+Note: Don't combile -i and -e args into -ie like other linux / unix applications.
+Anything immediately after the i is the suffix for file that will be created
+instead of replacing in-line
+
 ## T-mux Tip
 
 To save a scroll-back buffer in tmux, do the following:
