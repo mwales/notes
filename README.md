@@ -6,6 +6,13 @@ Notes, Writeups, Howtos
 ```
   find . -name "*.JPG" -exec convert {} -resize 1000x1000 -auto-orient ../resized/{} \;
 ```
+
+Convert a movie to an animated GIF from the command line
+
+```
+ffmpeg -i input_file.mp4 -vf scale=324:210 -r 10 output_file.gif
+```
+
 ## NFS Quick How-to (for working with embedded hardware)
 
 These instruction somewhat adopted from Digital Ocean guide:  https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-14-04
