@@ -161,4 +161,10 @@ If the panel taskbar becomes unresponsive, open a shell and type the following t
 
   xfce4-panel -r 
 
+# Downloading music videos from youtube into MP3s
+
+./youtube-dl -x --audio-format mp3 --playlist-items 1,4,5,10-13,15-16,19-21 InsertPlaylistIdHere
+
+./youtube-dl -x --audio-format mp3 YoutubeUrlOrId
+
 
