@@ -18,6 +18,20 @@ To get pictures to rotate to match their exif data (my canon camera does this):
 ```
 exiftran -ia *
 ```
+## Removing audio from a video
+
+I use this and kdeenlive to make slideshows for church programs
+
+```
+ ffmpeg -i input_video.mp4 -vn -acodec copy output_audio.aac
+```
+
+I end up guessing the audio format, and if it is wrong, ffmpeg will fail but
+output enough information for me to fix the file extention to the correct
+type.
+
+It is basically saying don't use any video codec, output only audio.  And just
+copy the audio directly from the input without transcoding it.
 
 ## NFS Quick How-to (for working with embedded hardware)
 
