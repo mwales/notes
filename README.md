@@ -68,6 +68,16 @@ kpartx will automatically scan a dd image of a drive for partitions, and mount t
 
 Use kpartx -d to delete the loop devices (in /dev/mapper) when done
 
+## LUKS open and close
+
+cryptsetup luksFormat /dev/sdb1
+
+cryptsetup luksOpen /dev/sdb1 encrypted-drive-name
+
+mount /dev/mapper/encrypted-drive-name /mount/point
+
+cryptsetup luksClose encrypted-drive-name
+
 ## Search and replace CLI / Multiple Files
 
 Use sed to manipulate file contents from the command line
