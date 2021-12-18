@@ -1,11 +1,11 @@
-= Git Notes =
+# Git Notes
 
 Cause I do the same dumb things over and over and git, and never remember how
 to do them
 
-== Undo the last commit ==
+## Undo the last commit
 
-== Git filter ==
+## Git filter
 
 Had an entire Advent of Code folder in a repo, filled with unrelated source and
 git commits.  Wanted to move the Advent of Code source into it's own repo on
@@ -22,7 +22,7 @@ I could not easily just remove the AdventOfCode directory name and use it as
 root of the filtered path.  So I had to create a script to take the year folders
 and put them in the root directory
 
-=== Create a new repo using contents of existing repo ===
+### Create a new repo using contents of existing repo
 
 * Create a separate clone of the github education repo
 * Create the following script in the directory above (where the filter script is)
@@ -47,7 +47,7 @@ cd education
 * I believe that must have errored, which leads the following command:
 * git push --set-upstream AoC master (new repos don't have master branch, they have main now)
 
-=== Create a new repo that won't have all source you are moving out ===
+### Create a new repo that won't have all source you are moving out
 
 * Made a clone of old education repository
 * cd education
