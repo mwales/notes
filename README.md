@@ -191,4 +191,110 @@ If the panel taskbar becomes unresponsive, open a shell and type the following t
 
 ./youtube-dl -x --audio-format mp3 YoutubeUrlOrId
 
+# Desktop sharing / GUI remoting into XFCE Linux system
+
+Remote into the remote system using SSH
+
+Start a vnc server for the the current desktop
+
+```
+x11vnc -display :0
+```
+
+You can remote into the desktop using vncviewer remote_ip.  If you get a black screen, the screensaver
+for the remote system is probably activated.  You have to screen share that as well and unlock the
+screensaver
+
+Login to remote system via ssh again, and do the following:
+
+```
+sudo bash
+cd /run/lightdm/auth
+x11vnc -auth \:1 -display :1
+```
+
+For whatever reason when I do this, vncviewer / tightvnc wouldn't let me attach to it, but the
+xvncviewer would.  On the local system:
+
+```
+xvncviewer remote_ip:1
+```
+
+You probably should use at minimum password protection the vnc servers, they terminate when you
+exit vnc client.
+
+# Docker
+
+To setup docker / get it working
+
+```
+sudo apt-get install docker.io
+```
+
+This installs docker, and adds the docker group to the system, but it doesn't add the current
+user to the docker group.  So you will probably want to do that and then restart.
+
+```
+sudo usermod -aG docker ${USER}
+sudo reboot
+```
+
+To build a docker container, cd into the directory where Dockerfile is and then...
+
+```
+docker build --tag tag_for_the_image .
+```
+
+List the images on the system
+
+```
+docker images
+```
+
+Run the docker image
+
+```
+# This will block
+docker run tag_for_the_image
+
+# This will daemonize / not block
+docker run -d tag_for_the_image
+
+# This will let you name the instance
+docker run --name instance_name tag_for_the_image
+```
+
+To see what images are running...
+
+```
+docker ps
+
+# Not sure when I need the -a option, but tutorial showed this...
+docker ps -a
+```
+
+To stop the image
+
+```
+# If you didn't set the instance name, you will have to use ps to find out what the name is
+docker stop instance_name
+```
+
+See the logs for the instance
+
+```
+docker log instance_name
+
+# Also has a -f option to follow
+```
+
+To map a port into the container (external port:internal port)
+
+```
+docker run -p 5555:1335 tag_for_the_image
+```
+
+
+
+
 
