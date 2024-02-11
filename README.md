@@ -145,6 +145,13 @@ Sometimes I have different success with the Ubuntu pre-packaged adb versus the A
 
 ## Previewing Github Style Markdown
 
+### New Way
+
+Visual Studio Code has a pretty awesome markdown preview feature.  Split your view vertically, and
+then edit the markdown on the left, and make the right side the preview view of the same document.
+
+### Old Way
+
 Not all markdown is created equal, so in an effort to reduce the number of commits I have to make
 to github repos that have issues with the markdown, I should preview the markdown locally before
 I commit it.
@@ -331,6 +338,30 @@ the .vmx file
 ```
 keyboard.allowBothIRQs = "FALSE"
 keyboard.vusb.enable = "TRUE"
+```
+
+# PDF Joining and Splitting
+
+Both of these require PDF toolkit, which seems to be a snap now...
+
+```
+sudo apt-get install pdftk
+```
+
+## Joing multiple PDFs into 1 document
+
+```
+sudo apt-get install pdftk
+``
+
+```
+pdftk file1.pdf file2.pdf cat outpout joined.pdf
+```
+
+## Seperate multi-page PDF into multiple PDFs
+
+```
+pdfseparate input.pdf output-%d.pdf
 ```
 
 
