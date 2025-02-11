@@ -301,44 +301,11 @@ To map a port into the container (external port:internal port)
 docker run -p 5555:1335 tag_for_the_image
 ```
 
-# VMPlayer and VMWare
+# Virtualization
 
-## Slowdowns
+Notes about VMWare, virt-manager, and other virtualization stuff.
 
-Around version 16 or 17 I've found that the VMs (mine are typically Ubuntu
-based) are very slow after the computer has been on a few days (and typically
-emulated other systems for a few hours).  CPU utilization goes really high, but
-nothing seems obviously wrong / overwhelming the CPU.  Problem goes away as soon
-as your reboot the host.
-
-Someone suggested the following, and I think it might have helped a little bit,
-but not completely.
-
-Disabling the use of swap for VM RAM memory.  It's a setting available in the
-VMWare Workstation GUI, but it's not available in the GUI for the VMPlayer.
-
-You can manually force the config by adding the following to /etc/vmware/config:
-
-```
-prefvmx.minVmMemPct = "100"
-```
-
-## Freezing / Rejecting mouse and keyboard inputs
-
-After about 5 minutes a VM will sorta freeze / and reject all mouse and keyboard
-inputs.  If it's plyaing a video, it will typically continue playing the video
-until it ends. This started happening after migrating to VMPlayer 17.5.0.
-
-Reddit user jjvanier suggested this fix in the vmware subreddit, and I think it
-may have fixed the issue for me completely.
-
-Edit your .vmx file for the individual guest and add the following to the end of
-the .vmx file
-
-```
-keyboard.allowBothIRQs = "FALSE"
-keyboard.vusb.enable = "TRUE"
-```
+[Notes about Virtualization](virtualization.md)
 
 # PDF Joining and Splitting
 
@@ -355,7 +322,7 @@ sudo apt-get install pdftk
 ``
 
 ```
-pdftk file1.pdf file2.pdf cat outpout joined.pdf
+pdftk file1.pdf file2.pdf cat output joined.pdf
 ```
 
 ## Seperate multi-page PDF into multiple PDFs
@@ -364,5 +331,12 @@ pdftk file1.pdf file2.pdf cat outpout joined.pdf
 pdfseparate input.pdf output-%d.pdf
 ```
 
+## Removing pages (blank pages) from PDF1
 
+Scanning a mix of double-sided and single sided pages gives me a PDF with a
+bunch of blank pages that I need to remove.
+
+```
+qpdf input.pdf --pages . 1-3,8,9 -- output.pdf
+```
 

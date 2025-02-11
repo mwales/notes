@@ -1,6 +1,18 @@
 # Virtualization notes
 
-## Trying out QEMU-KVM
+I quit using VMWare emulators on Linux because:
+
+* Poor performance.  Would often get really laggy when running for a long period
+* Network stack goes up and down in the VM constantly
+* Every kernel update requires a bunch of shim stuff to get recompiled
+* Some kernel updates just break it / have to hunt for correct version that works
+* Snapshots aren't like forever save states and aren't in all versions
+
+
+# Linux KVM / QEMU / Virt-manager
+
+Linux actually has a tier-1 hypervisor built into the Linux kernel, and it's
+fantastic.  Install virt-manager to help you easily manager it from the desktop.
 
 # Checking CPU support
 
@@ -73,3 +85,46 @@ wiki, the guest agent does the following
 * Allows the host OS to properly shutdown the guest
 * Freeze the guest filesystem while a snapshot is being taken
 * Helps guest sync time after a snapshot is restored
+
+# VMWare Notes
+
+My notes for getting the most out of VMWare. This sometimes works, but it's
+still inferior to KVM virtualization.
+
+## Slowdowns
+
+Around version 16 or 17 I've found that the VMs (mine are typically Ubuntu
+based) are very slow after the computer has been on a few days (and typically
+emulated other systems for a few hours).  CPU utilization goes really high, but
+nothing seems obviously wrong / overwhelming the CPU.  Problem goes away as soon
+as your reboot the host.
+
+Someone suggested the following, and I think it might have helped a little bit,
+but not completely.
+
+Disabling the use of swap for VM RAM memory.  It's a setting available in the
+VMWare Workstation GUI, but it's not available in the GUI for the VMPlayer.
+
+You can manually force the config by adding the following to /etc/vmware/config:
+
+```
+prefvmx.minVmMemPct = "100"
+```
+
+## Freezing / Rejecting mouse and keyboard inputs
+
+After about 5 minutes a VM will sorta freeze / and reject all mouse and keyboard
+inputs.  If it's plyaing a video, it will typically continue playing the video
+until it ends. This started happening after migrating to VMPlayer 17.5.0.
+
+Reddit user jjvanier suggested this fix in the vmware subreddit, and I think it
+may have fixed the issue for me completely.
+
+Edit your .vmx file for the individual guest and add the following to the end of
+the .vmx file
+
+```
+keyboard.allowBothIRQs = "FALSE"
+keyboard.vusb.enable = "TRUE"
+```
+
