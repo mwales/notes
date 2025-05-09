@@ -340,3 +340,13 @@ bunch of blank pages that I need to remove.
 qpdf input.pdf --pages . 1-3,8,9 -- output.pdf
 ```
 
+# vi mode for bash
+
+To use vi / vim keybindings in bash shell, execute the following command or
+add it to the ~/.bashrc
+
+```
+set -o vi
+```
+
+
