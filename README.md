@@ -175,7 +175,7 @@ sudo apt-get install pdftk
 
 ```
 sudo apt-get install pdftk
-``
+```
 
 ```
 pdftk file1.pdf file2.pdf cat output joined.pdf
