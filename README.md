@@ -1,6 +1,18 @@
 # notes
 Notes, Writeups, Howtos
 
+## Separate Notes
+
+For subjects that had enough notes for their own pages...
+
+* [Virtualization](virtualization.md)
+* [Android and ADB](Android.md)
+* [Embedded](embedded.md)
+* [Docker](docker.md)
+* [Git](git_notes.md)
+* [Python and VENV](python.md)
+* [Storage / NAS](storage_nas.md)
+
 ## How to command line resize images for display on website
 
 ```
@@ -33,51 +45,6 @@ type.
 It is basically saying don't use any video codec, output only audio.  And just
 copy the audio directly from the input without transcoding it.
 
-## NFS Quick How-to (for working with embedded hardware)
-
-These instruction somewhat adopted from Digital Ocean guide:  https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-14-04
-
-To install:
-```
-sudo apt-get install nfs-kernel-server
-```
-
-Create a directory to export
-```
-sudo mkdir /exports
-cd /exports
-sudo mkdir embedded
-sudo chown nobody:nogroup embedded
-sudo chmod a+rwx embedded
-```
-
-Update the exports configuration file /etc/exports, and add the following line:
-```
-/exports/embedded 192.168.1.50(rw,sync,no_root_squash,no_subtree_check)
-```
-Restart NFS and what not:
-```
-sudo exportfs -a
-# This next step is obviously upstart specific (Ubuntu 14.04 and variants, or earlier)
-sudo service nfs-kernel-server start
-```
-
-## Working with disk images
-
-kpartx will automatically scan a dd image of a drive for partitions, and mount the partitions to loop devices
-
-Use kpartx -d to delete the loop devices (in /dev/mapper) when done
-
-## LUKS open and close
-
-cryptsetup luksFormat /dev/sdb1
-
-cryptsetup luksOpen /dev/sdb1 encrypted-drive-name
-
-mount /dev/mapper/encrypted-drive-name /mount/point
-
-cryptsetup luksClose encrypted-drive-name
-
 ## Search and replace CLI / Multiple Files
 
 Use sed to manipulate file contents from the command line
@@ -108,40 +75,6 @@ save-buffer filename.txt
 ```
 
 Note:  It's really easy to forget the negative in the number of lines to capture!
-
-## udev and Android Debug Bridge notes
-
-A blog entry with some good notes about this:
-
-https://androidonlinux.wordpress.com/2013/05/12/setting-up-adb-on-linux/
-
-### udev rule format:
-
-```
-#ZTE (Ubuntu community rule format)
-SUBSYSTEM==usb, SYSFS{idVendor}==19d2, MODE=0664, GROUP=plugdev
-#DJI (Andorid dev documentation rule format)
-SUBSYSTEM==usb, ATTR{idVendor}==2ca3, ATTR{idProduct}==001f, MODE=0666, GROUP=plugdev
-```
-
-### Restarting udev
-
-I'm wondering now if this stuff still works with systemd
-
-```
-sudo service udev restart
-sudo udevadm contorl --reload-rules
-```
-
-### ADB commands
-
-Sometimes I have different success with the Ubuntu pre-packaged adb versus the Android tools binary
-
-```
-./adb kill-server
-./adb start-server
-./adb devices
-```
 
 ## Previewing Github Style Markdown
 
@@ -229,83 +162,6 @@ xvncviewer remote_ip:1
 
 You probably should use at minimum password protection the vnc servers, they terminate when you
 exit vnc client.
-
-# Docker
-
-To setup docker / get it working
-
-```
-sudo apt-get install docker.io
-```
-
-This installs docker, and adds the docker group to the system, but it doesn't add the current
-user to the docker group.  So you will probably want to do that and then restart.
-
-```
-sudo usermod -aG docker ${USER}
-sudo reboot
-```
-
-To build a docker container, cd into the directory where Dockerfile is and then...
-
-```
-docker build --tag tag_for_the_image .
-```
-
-List the images on the system
-
-```
-docker images
-```
-
-Run the docker image
-
-```
-# This will block
-docker run tag_for_the_image
-
-# This will daemonize / not block
-docker run -d tag_for_the_image
-
-# This will let you name the instance
-docker run --name instance_name tag_for_the_image
-```
-
-To see what images are running...
-
-```
-docker ps
-
-# Not sure when I need the -a option, but tutorial showed this...
-docker ps -a
-```
-
-To stop the image
-
-```
-# If you didn't set the instance name, you will have to use ps to find out what the name is
-docker stop instance_name
-```
-
-See the logs for the instance
-
-```
-docker log instance_name
-
-# Also has a -f option to follow
-```
-
-To map a port into the container (external port:internal port)
-
-```
-docker run -p 5555:1335 tag_for_the_image
-```
-
-# Virtualization
-
-Notes about VMWare, virt-manager, and other virtualization stuff.
-
-[Notes about Virtualization](virtualization.md)
 
 # PDF Joining and Splitting
 

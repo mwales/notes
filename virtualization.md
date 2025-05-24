@@ -8,6 +8,8 @@ I quit using VMWare emulators on Linux because:
 * Some kernel updates just break it / have to hunt for correct version that works
 * Snapshots aren't like forever save states and aren't in all versions
 
+I've quit using VMWare, my [old notes on using VMWare virtualization](virtualization_vmware.md)
+
 
 # Linux KVM / QEMU / Virt-manager
 
@@ -76,6 +78,18 @@ attach-disk vm_name /dev/sdX vdX --config
 sdX is the block device name on host.  vdX is the block device name (vda, vdb,
 etc) inside guest. The config option is cause the VM isn't running, and the
 change will be made at the next boot.
+
+You can also update XML and attach the disk by device ID (so even if it changes
+it's drive number it stays with the correct VM).
+
+```
+<disk type="block" device="disk">
+  <driver name="qemu" type="raw" cache="directsync" io="native"/>
+  <source dev="/dev/disk/by-id/wwn-blahblahblah"/>
+  <target dev="vdc" bus="virtio"/>
+  <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
+</disk>
+```
 
 ## VM-tools equivalent tool for qemu
 
