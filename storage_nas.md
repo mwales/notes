@@ -47,3 +47,83 @@ mount /dev/mapper/encrypted-drive-name /mount/point
 
 cryptsetup luksClose encrypted-drive-name
 
+# ZFS storage
+
+Storage filesystem.  Everything has checksums.  Can determine when data
+corruption has occured and correct it.  Pool storage, means we can add
+storage devices and easily change our storage container sizes separately.
+Can compress files on the container too.
+
+Terminology:
+
+* vdev: vdevs can have redundancy
+* dataset: a filesystem you can mount.  Don't put the whole pool in a single
+  dataset.  Can configure compression per dataset.
+* sync
+* arc: adaptive replacement cache. memory based read cache.
+* l2arc: disk based read cache
+* zvol: if datasets are like files/folders, zvols are like block devices. Can
+  only be used by 1 client.
+
+We create a storage pool using multiple disk drives.
+
+
+## Commands
+
+Look at the usage of all my storage tanks / pools
+
+```
+zfs list
+```
+
+```
+zpool list
+zpool status
+```
+
+Get performance metrics...
+
+```
+zpool iostat
+zpool iostat -v
+```
+## Maintenance
+
+Periodically, like once a month, go through the filesystem and check on the
+checksums / verify data integrity.
+
+```
+zpool scrub storage
+```
+
+## Moving
+
+Before moving the container, export it.  Allows the zpool to be easily imported
+on another system
+
+```
+zfs export my_pool
+```
+
+On new system, import all ZFS pools (and let ZFS find them automagically)
+
+```
+zfs import -a
+```
+
+
+
+## One time commands / creation
+
+```
+zpool create my_pool_name raidz da0 da1 da2
+```
+
+Create a dataset on the new pool
+
+```
+zfs create my_pool_name/my_dataset_name
+zfs set compression=gzip my_pool_name/my_dataset_name
+```
+
+
