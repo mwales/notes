@@ -2,6 +2,10 @@
 
 Notes, common usages I forget, and tips for Docker
 
+* image = Static filesystem, may layers of filesystems, based on dockerfile and build args
+* container = An image this is running currently / ran in the past.  Has state
+  not described by the Dockerfile
+
 ## Docker Setup
 
 To setup docker / get it working
@@ -24,6 +28,8 @@ To build a docker container, cd into the directory where Dockerfile is and then.
 docker build --tag tag_for_the_image .
 ```
 
+## Running Docker Images in Containers
+
 List the images on the system
 
 ```
@@ -43,7 +49,7 @@ docker run -d tag_for_the_image
 docker run --name instance_name tag_for_the_image
 ```
 
-To see what images are running...
+To see what containers / images are running...
 
 ```
 docker ps
@@ -71,6 +77,12 @@ To map a port into the container (external port:internal port)
 
 ```
 docker run -p 5555:1335 tag_for_the_image
+```
+
+To download a docker image from dockerhub
+
+```
+docker image pull pwncollege:challenge-legacy
 ```
 
 ## Debugging docker containers
@@ -103,6 +115,42 @@ able to make multiarch builds, for example:
 docker buildx build --platform linux/amd64,linux/arm64 \
 --tag wordchain:test .
 ```
+
+## Building Docker Images
+
+In your folder you are building image from, you can specify a .dockerignore
+to have docker build ignore certain files
+
+* ARG = Lets you set a variable in dockerfile from the builder command line
+```
+ARG email="docker_master@pants.com"
+```
+* CMD = Command to start container with, and it's args.  This can be overridden
+  when containers started by specifying a command after the container name / tag
+```
+CMD [ "/runme.sh", "arg1", "arg2" ]
+```
+
+## Docker image repository / dockerhub
+
+Login to the repo (if you don't specify a registry URL, it will use dockerhub
+by default.
+
+```
+docker login your_docker_registry.com
+```
+
+You can push your image to the registry:
+
+```
+docker image push username/docker-image-name:latest
+```
+
+You can now run or pull the image from the registry...
+```
+docker image build -t repo/username/docker-image-name:latest .
+docker image pull username/docker-image-name:latest
+
 
 
 
