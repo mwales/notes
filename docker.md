@@ -153,4 +153,14 @@ docker image pull username/docker-image-name:latest
 
 
 
+## Podman
+
+Docker without all the root
+
+```
+podman login docker.com
+podman pull docker.io/mwales/chal_test:latest
+
+podman run --rm -it docker.io/mwales/chal_test:latest /bin/bash
+podman run -v ./:/mnt --rm -it docker.io/mwales/chal_test:latest /bin/bash
 
