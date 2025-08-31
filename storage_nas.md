@@ -31,6 +31,28 @@ sudo exportfs -a
 sudo service nfs-kernel-server start
 ```
 
+# Adding physical disks to proxmox / QEMU VMs
+
+Don't add the disks by what SATA controller they are attached to because it 
+will change all the time, add them by disk ID.
+
+Enumerate your disks using one of the paths here:
+```
+ls /dev/disk/by-id
+```
+
+To add to VM:
+
+```
+qm set vm_id -scsi2 /dev/disk/by-id/my_long_disk_name
+```
+ 
+You can get the VM names and numbers by executing the following:
+
+```
+qm list --full
+```
+
 ## Working with disk images
 
 kpartx will automatically scan a dd image of a drive for partitions, and mount the partitions to loop devices
@@ -46,6 +68,12 @@ cryptsetup luksOpen /dev/sdb1 encrypted-drive-name
 mount /dev/mapper/encrypted-drive-name /mount/point
 
 cryptsetup luksClose encrypted-drive-name
+
+I didn't have the drive luksOpen with a name, but it was still open...
+
+```
+cryptsetup close /dev/mapper/luks-blah blah blah
+```
 
 # ZFS storage
 
