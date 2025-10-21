@@ -181,6 +181,11 @@ sudo apt-get install pdftk
 pdftk file1.pdf file2.pdf cat output joined.pdf
 ```
 
+```
+qpdf --empty --pages first.pdf second.pdf third.pdf -- output.pdf
+qpdf --empty --pages other 2 another 3-z -- output.pdf      # Haven't tried this format TBH
+```
+
 ## Seperate multi-page PDF into multiple PDFs
 
 ```
