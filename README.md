@@ -76,6 +76,29 @@ save-buffer filename.txt
 
 Note:  It's really easy to forget the negative in the number of lines to capture!
 
+# T-mux timeout fix / STIG issue
+
+One of the prescribed hardening measures for Linux is to force a shell timeout,
+but it will cause tmux to get killed while you are using it.  It usually gets
+configured something like
+
+```
+TMOUT=600
+```
+
+Change the config for this (usually in directory of /etc/profile.d) to the
+following:
+
+```
+if [ -n "$TMUX" ]; then
+    # Tmux is running
+    TMOUT=0
+else
+    # not tmux, close idle SSH and tty sessions
+    TMOUT=600
+fi
+```
+
 ## Previewing Github Style Markdown
 
 ### New Way
