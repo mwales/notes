@@ -137,9 +137,11 @@ On new system, import all ZFS pools (and let ZFS find them automagically)
 
 ```
 zfs import -a
+
+# or, individually
+zfs import
+zfs import pool_name
 ```
-
-
 
 ## One time commands / creation
 

@@ -91,6 +91,39 @@ it's drive number it stays with the correct VM).
 </disk>
 ```
 
+## Backing up and restoring VMs
+
+Shutdown the VMs first (you can move them while they are on too, but that isn't
+the easiest.
+
+```
+virsh list --all
+
+virsh shutdown vmname
+```
+
+Dump your VM settings to XML and then copy the QCOW container.
+
+```
+virsh dumpxml vmname > vmname.xml
+sudo cp --sparse=always /var/lib/libvirt/images/vmname.qcow2 ./
+```
+
+To restore the VM (I restored mine to Debian 13)...
+
+```
+sudo virsh -c qemu:///system define vmname.xml
+sudo cp --sparse=always vmname.qcow2 /var/lib/libvirt/images
+```
+
+Mine complained about networking not working when trying to restart them, the
+suggested fix by AI:
+
+```
+sudo virsh net-start default
+sudo virsh net-autostart default
+```
+
 ## VM-tools equivalent tool for qemu
 
 In your guest VM, install the qemu-guest-agent tools.  According to proxmox
