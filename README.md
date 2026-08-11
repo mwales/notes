@@ -224,6 +224,23 @@ bunch of blank pages that I need to remove.
 qpdf input.pdf --pages . 1-3,8,9 -- output.pdf
 ```
 
+## Rotating some pages
+
+The --rotate option may be repeated. angle may be 90, 180, or 270. If preceded
+by + or -, the angle is added to or subtracted from the original rotation.
+
+```
+qpdf in.pdf out.pdf --rotate=[+|-]angle:page-range
+```
+
+For example, the following example would rotate pages 2, 4, and 6 clockwise by
+90 degrees from whatever rotation they originally had and would force the
+rotation of pages 7 through 9 to 180.
+
+```
+qpdf in.pdf out.pdf --rotate=+90:2,4,6 --rotate=180:7-9
+```
+
 # vi mode for bash
 
 To use vi / vim keybindings in bash shell, execute the following command or
