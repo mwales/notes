@@ -37,9 +37,14 @@ distro else you'll get wheel files fron the incorrect python version.
 Setup a venv for you mirror purposes, and install the packages you want mirrored.
 
 ```
+# Make requirements.txt from installed packages
 pip freeze > requirements.txt
 mkdir wheelhouse
 pip download -r requirements.txt -d wheelhouse
+
+# Make wheels from existing requirements
+mkdir wheels
+pip wheel -r requirements.txt -w wheels
 ```
 
 Tar your requirements and wheelhouse directory up, and transfer to your offline computer.
@@ -50,4 +55,6 @@ Setup your venv on your offline computer.  Install the packages from wheels by e
 
 ```
 pip install -r requirements.txt --no-index --find-links wheelhouse
+
+pip install *.whl
 ```
